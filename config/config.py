@@ -4,6 +4,7 @@ import torch.nn as nn
 from config.model_config import models
 from config.scheduler_config import schedulers
 from config.optimizer_config import optimizers
+from config.dataset_config import datasets
 
 import argparse
 
@@ -13,6 +14,7 @@ parser.add_argument("--model"           , type=str, help="model to use for train
 parser.add_argument("--criterion"       , type=str, help="loss function to use for training", default="cross_entropy")
 parser.add_argument("--optimizer"       , type=str, help="optimizer to use for training", default="adam")
 parser.add_argument("--scheduler"       , type=str, help="scheduler to use for training", default="cosine")
+parser.add_argument("--dataset"         , type=str, help="dataset to use for training", default="cifar10")
 
 parser.add_argument('--batch_size'      , type=int, default=64)
 parser.add_argument('--epochs'          , type=int, default=10)
@@ -46,6 +48,8 @@ def config():
 
     args.scheduler, scheduler_parser = schedulers[args.scheduler]
     args.scheduler_args, rest = scheduler_parser(rest)
+
+    args.dataset = datasets[args.dataset]
 
     if len(rest) != 0:
         raise ValueError(f"Unrecognized arguments: {rest}")
